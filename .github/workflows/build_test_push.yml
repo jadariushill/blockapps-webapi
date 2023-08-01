@@ -15,8 +15,7 @@ jobs:
 
       - name: Test Container
         run: |
-          cd ${{ github.workspace }}
-          pwd
+          cd ${{ github.workspace }}/src/test/cypress/e2e
           docker-compose up --exit-code-from cypress
 
       - name: Build Container
