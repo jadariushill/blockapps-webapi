@@ -17,6 +17,11 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: Test Container
+        run: |
+          cd ${{ github.workspace }}/src/test/cypress/e2e
+          docker-compose up --exit-code-from cypress
+
       - name: Update Version
         id: update_version
         run: |
@@ -25,11 +30,6 @@ jobs:
           cd ${{ github.workspace }}/src/server
           npx semantic-release
           echo "VTAG=$(cat ./package.json | jq --raw-output .version)" >> "$GITHUB_OUTPUT"
-
-      - name: Test Container
-        run: |
-          cd ${{ github.workspace }}/src/test/cypress/e2e
-          docker-compose up --exit-code-from cypress
 
       - name: Build Container
         run: |
