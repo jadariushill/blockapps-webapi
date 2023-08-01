@@ -12,6 +12,15 @@ jobs:
     steps:
       - name: Check out code
         uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Update Version
+        run: |
+          cd ${{ github.workspace }}/src/server
+          npx semantic-release
+          export VTAG=$(cat ./package.json | jq --raw-output .version)
+          echo "::set-env name=VTAG::$VTAG"
 
       - name: Test Container
         run: |
@@ -19,7 +28,9 @@ jobs:
           docker-compose up --exit-code-from cypress
 
       - name: Build Container
-        run: docker build -t blockappsserver .
+        run: |
+          echo $VTAG
+          docker build -t blockappsserver .
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
