@@ -11,11 +11,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Check out code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Test Container
         run: |
-          cd blockapps-webapi/src/test/cypress/e2e
+          cd ${{ github.workspace }}
+          pwd
           docker-compose up --exit-code-from cypress
 
       - name: Build Container
