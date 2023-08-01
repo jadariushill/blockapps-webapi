@@ -15,8 +15,13 @@
       "main"
     ],
     "plugins": [
+      "commit-analyzer-fail-on-no-release",
+      "@semantic-release/release-notes-generator",
       [
-        "commit-analyzer-fail-on-no-release"
+        "@semantic-release/npm",
+        {
+          "npmPublish": false
+        }
       ]
     ]
   }
