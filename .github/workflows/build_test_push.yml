@@ -15,7 +15,7 @@ jobs:
 
       - name: Test Container
         run: |
-          echo pwd 
+          cd blockapps-webapi/src/test/cypress/e2e
           docker-compose up --exit-code-from cypress
 
       - name: Build Container
