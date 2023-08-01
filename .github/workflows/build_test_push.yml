@@ -68,5 +68,5 @@ jobs:
       - name: Terraform Apply
         run: |
           cd ${{ github.workspace }}/src/terraform
-          terraform init -backend-config="blockapps-server-backend-prod" -backend-config="key=state/terraform.tfstate" -backend-config="region=${{ secrets.AWS_REGION }}"
+          terraform init -backend-config="bucket=blockapps-server-backend-prod" -backend-config="key=state/terraform.tfstate" -backend-config="region=${{ secrets.AWS_REGION }}"
           terraform apply --auto-approve -var="env=prod" -var="region=${{ secrets.AWS_REGION }}" -var="access_key=${{ secrets.AWS_ACCESS_KEY_ID }}" -var="account_number=${{ secrets.AWS_ACCOUNT_NUMBER }}" -var="secret_key=${{ secrets.AWS_SECRET_ACCESS_KEY }}" -replace=module.env_prod[0].aws_ecs_task_definition.blockapps_server_task_def
