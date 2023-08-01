@@ -17,6 +17,8 @@ jobs:
 
       - name: Update Version
         run: |
+          npm install commit-analyzer-fail-on-no-release
+          npm install semantic-release
           cd ${{ github.workspace }}/src/server
           npx semantic-release
           export VTAG=$(cat ./package.json | jq --raw-output .version)
