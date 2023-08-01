@@ -60,6 +60,7 @@ jobs:
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:PROD
   adjust_iac:
     name: Adjust Infrastructure
+    needs: build_push_docker
     runs-on: ubuntu-latest
     steps:
       - name: Check out code
