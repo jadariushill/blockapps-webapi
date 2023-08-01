@@ -13,6 +13,14 @@ jobs:
       - name: Check out code
         uses: actions/checkout@v2
 
+      - name: Test Container
+        run: |
+          cd blockapps-webapi/src/test/cypress/e2e/
+          docker-compose up --exit-code-from cypress
+
+      - name: Build Container
+        run: docker build -t blockappsserver .
+
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
         with:
@@ -23,13 +31,6 @@ jobs:
       - name: Login to Amazon ECR
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v1
-
-      - name: Build Container
-        run: docker build -t blockappsserver .
-
-      - name: Test Container
-        run: |
-          docker run --rm blockappsserver
 
       - name: Tag and push image to Amazon ECR
         env:
