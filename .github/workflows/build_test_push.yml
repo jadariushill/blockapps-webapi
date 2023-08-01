@@ -29,7 +29,9 @@ jobs:
           npm install semantic-release
           cd ${{ github.workspace }}/src/server
           npx semantic-release
-          echo "VTAG=$(cat ./package.json | jq --raw-output .version)" >> "$GITHUB_OUTPUT"
+          VTAG=$(cat ./package.json | jq --raw-output .version)
+          echo "VTAG=${VTAG}" >> "$GITHUB_OUTPUT"
+          echo $VTAG
 
       - name: Build Container
         run: |
