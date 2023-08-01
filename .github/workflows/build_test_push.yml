@@ -3,7 +3,7 @@ name: Build, Test, Push Docker
 
 on:
   push:
-    branches: [ master ]
+    branches: [ main ]
 jobs:
   build:
     name: Build Image
