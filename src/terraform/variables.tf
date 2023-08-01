@@ -14,10 +14,10 @@ variable "env" {
   type = string
 }
 
-variable access_key {
+variable "access_key" {
   type = string
 }
 
-variable secret_key {
+variable "secret_key" {
   type = string
 }
