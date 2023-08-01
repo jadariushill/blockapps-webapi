@@ -3,6 +3,8 @@ name: Build, Test, Push Docker
 on:
   push:
     branches: [main]
+  workflow_dispatch:
+
 jobs:
   build:
     name: Build/Test/Push Image
