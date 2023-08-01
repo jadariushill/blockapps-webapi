@@ -52,8 +52,9 @@ jobs:
         env:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
           ECR_REPOSITORY: blockappsserver
+          IMAGE_TAG: ${{ steps.update_version.outputs.VTAG }}
         run: |
-          docker tag blockappsserver $ECR_REGISTRY/$ECR_REPOSITORY:${{ steps.update_version.outputs.VTAG }}
-          docker push $ECR_REGISTRY/$ECR_REPOSITORY:${{ steps.update_version.outputs.VTAG }}
-          docker tag blockappsserver $ECR_REGISTRY/$ECR_REPOSITORY:$PROD
-          docker push $ECR_REGISTRY/$ECR_REPOSITORY:$PROD
+          docker tag blockappsserver $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+          docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+          docker tag blockappsserver $ECR_REGISTRY/$ECR_REPOSITORY:PROD
+          docker push $ECR_REGISTRY/$ECR_REPOSITORY:PROD
