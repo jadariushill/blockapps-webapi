@@ -9,6 +9,8 @@ jobs:
   build:
     name: Build/Test/Push Image
     runs-on: ubuntu-latest
+    env:
+      version: 0.0.0
     steps:
       - name: Check out code
         uses: actions/checkout@v3
@@ -16,13 +18,13 @@ jobs:
           fetch-depth: 0
 
       - name: Update Version
+        id: update_version
         run: |
           npm install commit-analyzer-fail-on-no-release
           npm install semantic-release
           cd ${{ github.workspace }}/src/server
           npx semantic-release
-          export VTAG=$(cat ./package.json | jq --raw-output .version)
-          echo "::set-env name=VTAG::$VTAG"
+          echo "VTAG=$(cat ./package.json | jq --raw-output .version)" >> "$GITHUB_OUTPUT"
 
       - name: Test Container
         run: |
@@ -31,7 +33,6 @@ jobs:
 
       - name: Build Container
         run: |
-          echo $VTAG
           docker build -t blockappsserver .
 
       - name: Configure AWS credentials
@@ -49,7 +50,9 @@ jobs:
         env:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
           ECR_REPOSITORY: blockappsserver
-          IMAGE_TAG: PROD
+          IMAGE_TAG: ${{ steps.update_version.outputs.VTAG }}
         run: |
           docker tag blockappsserver $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+          docker tag blockappsserver $ECR_REGISTRY/$ECR_REPOSITORY:$PROD
+          docker push $ECR_REGISTRY/$ECR_REPOSITORY:$PROD
