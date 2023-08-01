@@ -18,19 +18,35 @@ const dateFormatter = new Intl.DateTimeFormat("en-US", options);
 const url =
   "https://api.github.com/repos/blockapps/strato-getting-started/releases/tags/";
 
-app.get("/getTagCreationDate", (req, res) => {
-  let tagName = req.headers["tag-name"];
+app.get("/release", (req, res) => {
+  let tagName = req.query.tagName;
+
   if (tagName == null || !tagName.trim()) {
-    res
+    let response = res
       .status(400)
-      .send({ created_at: null, errorMsg: "Please enter a tag name." });
+      .send(
+        createResponseObj(null, "Please enter a tag name.", null, null).result
+      );
   } else {
-    console.log(`Searching for tag: ${tagName}`);
-    getReleaseDate(tagName)
-      .then((result) => {
-        res.status(result.status).send(result);
+    getReleaseDateByTagName(tagName)
+      .then(({ statusCode, result }) => {
+        res.status(statusCode).send(result);
       })
-      .catch((error) => res.status(error.status ?? 500).send(error));
+      .catch((err) => {
+        console.log(
+          `Something went wrong with request for tag ${tagName}. Error: ${err}`
+        );
+        res
+          .status(500)
+          .send(
+            createResponseObj(
+              null,
+              "Something went wrong. Please try again later",
+              500,
+              null
+            )
+          );
+      });
   }
 });
 
@@ -38,32 +54,33 @@ app.listen(port, () => {
   console.log(`BlockApps Release Tag API listening on port ${port}`);
 });
 
-function getReleaseDate(tagName) {
+const createResponseObj = (creationDate, errorMsg, statusCode) => {
+  return {
+    statusCode,
+    result: {
+      creationDate,
+      errorMsg,
+    },
+  };
+};
+
+const getReleaseDateByTagName = (tagName) => {
   return new Promise((resolve, reject) => {
     fetch(url.concat(tagName))
       .then((res) => {
-        if (res.status == 200) {
-          res.json().then((resp) =>
-            resolve({
-              created_at: dateFormatter.format(new Date(resp.created_at)),
-              error_msg: null,
-              responseStatus: res.status,
-            })
-          );
-        } else if (res.status == 404) {
-          resolve({
-            created_at: null,
-            error_msg: "Release tag name not found!",
-            responseStatus: res.status,
-          });
-        } else {
-          reject({
-            created_at: null,
-            error_msg: "Something went wrong. Please try again later.",
-            responseStatus: res.status,
-          });
-        }
+        res.json().then((response) => {
+          if (res.status == 200) {
+            let formattedDate = dateFormatter.format(
+              new Date(response["created_at"])
+            );
+            resolve(createResponseObj(formattedDate, null, res.status));
+          } else if (res.status == 404) {
+            resolve(createResponseObj(null, "Tag not found.", res.status));
+          } else {
+            resolve(createResponseObj(null, res.statusText, res.status));
+          }
+        });
       })
       .catch((err) => reject(err));
   });
-}
+};

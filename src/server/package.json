@@ -6,6 +6,7 @@
     "node-fetch": "^2.6.12"
   },
   "devDependencies": {
+    "cypress": "^12.17.2",
     "semantic-release": "^21.0.7"
   },
   "release": {
