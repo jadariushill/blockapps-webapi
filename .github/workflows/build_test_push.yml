@@ -26,9 +26,9 @@ jobs:
 
       - name: Build Container
         run: docker build -t blockappsserver .
-      
-    - name: Test Container
-      run: |
+
+      - name: Test Container
+        run: |
           docker run --rm blockappsserver
 
       - name: Tag and push image to Amazon ECR
