@@ -1,0 +1,15 @@
+version: "3.2"
+services:
+  blockappswebapi:
+    build: ../../../../
+    environment:
+      - PORT=3000
+  cypress:
+    image: "cypress/included:12.17.2"
+    depends_on:
+      - blockappswebapi
+    environment:
+      - CYPRESS_baseUrl=http://blockappswebapi:3000
+    working_dir: /test
+    volumes:
+      - ../../../test/:/test
