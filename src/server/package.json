@@ -1,6 +1,21 @@
 {
+  "name": "blockapps-webapi",
   "dependencies": {
+    "commit-analyzer-fail-on-no-release": "^1.0.1",
     "express": "^4.18.2",
     "node-fetch": "^2.6.12"
+  },
+  "devDependencies": {
+    "semantic-release": "^21.0.7"
+  },
+  "release": {
+    "branches": [
+      "main"
+    ],
+    "plugins": [
+      [
+        "commit-analyzer-fail-on-no-release"
+      ]
+    ]
   }
 }
