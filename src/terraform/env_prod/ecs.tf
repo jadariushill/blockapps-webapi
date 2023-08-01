@@ -7,15 +7,15 @@ resource "aws_ecs_cluster" "blockapps_server_ecs_cluster" {
 
 
 resource "aws_ecs_task_definition" "blockapps_server_task_def" {
-  family = "blockapps-server-prod"
-  memory = 512
-  cpu = 256
+  family             = "blockapps-server-prod"
+  memory             = 512
+  cpu                = 256
   execution_role_arn = aws_iam_role.blockapps_server_ecs_execution_role.arn
   runtime_platform {
     operating_system_family = "LINUX"
   }
   requires_compatibilities = ["FARGATE"]
-  network_mode = "awsvpc"
+  network_mode             = "awsvpc"
   container_definitions = jsonencode([
     {
       name      = "blockapps-server"
@@ -35,15 +35,15 @@ resource "aws_ecs_task_definition" "blockapps_server_task_def" {
 
 
 resource "aws_ecs_service" "blockapps_server_ecs_service" {
-  name = "blockapps-server-prod"
-  cluster = aws_ecs_cluster.blockapps_server_ecs_cluster.arn
+  name            = "blockapps-server-prod"
+  cluster         = aws_ecs_cluster.blockapps_server_ecs_cluster.arn
   task_definition = aws_ecs_task_definition.blockapps_server_task_def.arn
-  desired_count = 2
-  launch_type = "FARGATE"
+  desired_count   = 2
+  launch_type     = "FARGATE"
   network_configuration {
     assign_public_ip = true
-    subnets = data.aws_subnets.vpc_subnets.ids
-    security_groups = [aws_security_group.blockapps_server_sg.id]
+    subnets          = data.aws_subnets.vpc_subnets.ids
+    security_groups  = [aws_security_group.blockapps_server_sg.id]
   }
 
   load_balancer {
@@ -56,7 +56,7 @@ resource "aws_ecs_service" "blockapps_server_ecs_service" {
 resource "aws_appautoscaling_target" "ecs_target" {
   max_capacity       = 4
   min_capacity       = 2
-  resource_id        = "service/${aws_ecs_cluster.blockapps_server_ecs_cluster.name}/${aws_ecs_service.blockapps_server_ecs_service.name}"  
+  resource_id        = "service/${aws_ecs_cluster.blockapps_server_ecs_cluster.name}/${aws_ecs_service.blockapps_server_ecs_service.name}"
   scalable_dimension = "ecs:service:DesiredCount"
   service_namespace  = "ecs"
   role_arn           = aws_iam_role.ecs-autoscale-role.arn
@@ -74,7 +74,7 @@ resource "aws_appautoscaling_policy" "ecs_target_cpu" {
     predefined_metric_specification {
       predefined_metric_type = "ECSServiceAverageCPUUtilization"
     }
-    target_value = 15
+    target_value = 85
   }
   depends_on = [aws_appautoscaling_target.ecs_target]
 }
@@ -90,7 +90,7 @@ resource "aws_appautoscaling_policy" "ecs_target_memory" {
     predefined_metric_specification {
       predefined_metric_type = "ECSServiceAverageMemoryUtilization"
     }
-    target_value = 15
+    target_value = 85
   }
   depends_on = [aws_appautoscaling_target.ecs_target]
 }
