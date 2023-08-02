@@ -4,7 +4,13 @@
 
 The React frontend is available at http://blockapps-server-alb-566453451.us-east-1.elb.amazonaws.com.
 
-The api endpoint is available at http://blockapps-server-alb-566453451.us-east-1.elb.amazonaws.com/release?tagName=9.0.0.
+The API endpoint is available at http://blockapps-server-alb-566453451.us-east-1.elb.amazonaws.com/release?tagName=9.0.0. The API endpoint takes one query parameter named 'tagName' and returns a json object with two keys:
+```
+{
+  "creationDate":"September 14, 2022 at 9:44:59 PM UTC",
+  "errorMsg":null
+}
+```
 
 ## Introduction:
 
