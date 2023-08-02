@@ -3,6 +3,7 @@
   "version": "1.0.2",
   "dependencies": {
     "commit-analyzer-fail-on-no-release": "^1.0.1",
+    "cors": "^2.8.5",
     "express": "^4.18.2",
     "node-fetch": "^2.6.12"
   },

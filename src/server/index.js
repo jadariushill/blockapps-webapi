@@ -2,6 +2,11 @@ const express = require("express");
 const fetch = require("node-fetch");
 const app = express();
 const port = 3000;
+const cors = require("cors");
+const corsOptions = {
+  origin: "*",
+  optionsSuccessStatus: 200,
+};
 
 const options = {
   year: "numeric",
@@ -17,6 +22,8 @@ const dateFormatter = new Intl.DateTimeFormat("en-US", options);
 
 const url =
   "https://api.github.com/repos/blockapps/strato-getting-started/releases/tags/";
+
+app.use(cors(corsOptions));
 
 app.get("/release", (req, res) => {
   let tagName = req.query.tagName;
