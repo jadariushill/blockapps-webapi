@@ -10,5 +10,5 @@ RUN npm run build
 WORKDIR ../server
 RUN npm install
 RUN npm install pm2 -g
-CMD ["pm2-runtime","./server/index.js"]
+CMD ["pm2-runtime","index.js"]
 EXPOSE 3000
