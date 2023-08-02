@@ -14,7 +14,7 @@ describe("BlockApp Server API Tests", () => {
   it("should return an error message when tagName is empty", () => {
     cy.request({
       method: "GET",
-      url: "/release?tagName=",
+      url: `/release?tagName=`,
       failOnStatusCode: false,
     }).then((response) => {
       expect(response.status).to.equal(400);
