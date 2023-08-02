@@ -2,6 +2,7 @@ const express = require("express");
 const fetch = require("node-fetch");
 const app = express();
 const port = 3000;
+const path = require("path");
 const cors = require("cors");
 const corsOptions = {
   origin: "*",
@@ -19,11 +20,17 @@ const options = {
 };
 
 const dateFormatter = new Intl.DateTimeFormat("en-US", options);
-
+const reactPath = path.resolve("../client/build");
 const url =
   "https://api.github.com/repos/blockapps/strato-getting-started/releases/tags/";
 
 app.use(cors(corsOptions));
+
+app.use(express.static(reactPath));
+
+app.get("/", function (req, res) {
+  res.sendFile(reactPath);
+});
 
 app.get("/release", (req, res) => {
   let tagName = req.query.tagName;
@@ -35,6 +42,7 @@ app.get("/release", (req, res) => {
         createResponseObj(null, "Please enter a tag name.", null, null).result
       );
   } else {
+    console.log(`Fetching release data for tag ${tagName}`);
     getReleaseDateByTagName(tagName)
       .then(({ statusCode, result }) => {
         res.status(statusCode).send(result);
