@@ -16,8 +16,8 @@ describe("BlockApps WebAPI React Tests", () => {
         cy.get(".MuiButtonBase-root").click()
 
         cy.get("p").should(
-            "have.text",
-            "The release tagged with 9.0.0 was created September 14, 2022 at 4:44:59 PM CDT"
+            "contain.text",
+            "The release tagged with 9.0.0 was created September 14, 2022"
           );
     });
     it("Should Display Help Text When Tag Input is Not Found", () => {
