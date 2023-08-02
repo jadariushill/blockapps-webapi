@@ -83,7 +83,7 @@ function App() {
 }
 
 const getReleaseDate = (tagName) => {
-  let url = "http://localhost:3000/release";
+  let url = "/release";
   return new Promise((resolve, reject) => {
     fetch(url.concat(`/?tagName=${tagName}`))
       .then((resp) => resp.json().then(resolve))
