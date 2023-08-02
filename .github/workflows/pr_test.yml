@@ -12,6 +12,12 @@ jobs:
       - name: Check out code
         uses: actions/checkout@v3
 
+      - name: Build React App
+        run: |
+          cd ${{ github.workspace }}/src/client
+          npm install -g serve
+          serve -s build
+
       - name: Test Container
         run: |
           cd ${{ github.workspace }}/src/test/cypress/e2e
