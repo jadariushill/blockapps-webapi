@@ -15,8 +15,7 @@ jobs:
       - name: Build React App
         run: |
           cd ${{ github.workspace }}/src/client
-          npm install -g serve
-          serve -s build
+          npm run build
 
       - name: Test Container
         run: |
